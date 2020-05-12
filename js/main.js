@@ -20,7 +20,7 @@ const search = async searchTerm => {
 
         console.log(pokemon)
     } else {
-        image.src = '/img/default.png'
+        image.src = 'img/default.png'
         title.textContent = 'Pokemon no encontrado'
     }
 }
