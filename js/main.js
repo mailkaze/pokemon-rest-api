@@ -11,14 +11,33 @@ const search = async searchTerm => {
     if ( res.ok ) {
         const pokemon = await res.json()
         const name = pokemon.name[0].toUpperCase() + pokemon.name.slice(1)
+        const typesArr = []
+        const abilitiesArr = []
+        const statsArr = []
+
+        pokemon.types.forEach(t => typesArr.push(t.type.name))
+        pokemon.abilities.forEach(a => abilitiesArr.push(a.ability.name))
+        pokemon.stats.forEach(s => statsArr.push(`${s.stat.name}: ${s.base_stat}`))
+
+        const buildStatsList = arr => {
+            let fragment = new DocumentFragment()
+            fragment.innerHTML = 'Estadísticas: '
+            arr.forEach(e => {
+                const p = document.createElement('p')
+                p.innerText = e
+                fragment.appendChild(p)
+            })
+            return fragment
+        }
+
+
 
         image.src = pokemon.sprites.front_default
         title.textContent = name
-        types.textContent = 'Tipo(s): ' + pokemon.types[0].type.name
-        abilities.textContent = 'habilidades: ' + pokemon.abilities[0].ability.name
-        stats.textContent = 'Estadísticas: ' + pokemon.stats[0].stat.name
-
-        console.log(pokemon)
+        types.textContent = 'Tipo(s): ' + typesArr.join(', ')
+        abilities.textContent = 'habilidades: ' + abilitiesArr.join(', ')
+        stats.textContent = 'Estadísticas:'
+        stats.appendChild(buildStatsList(statsArr))
     } else {
         image.src = 'img/default.png'
         title.textContent = 'Pokemon no encontrado'
